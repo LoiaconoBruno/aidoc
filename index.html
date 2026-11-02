@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>aidoc: estructura para IAs</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    textarea.fuente { font-family: var(--mono); font-size: 0.8rem; min-height: 260px; }
+    pre.salida { background: var(--surface-2); border-radius: 8px; padding: 12px; overflow: auto; max-height: 520px; font: 0.8rem/1.5 var(--mono); white-space: pre-wrap; word-break: break-word; margin: 0; }
+    .tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; }
+    .tabs button.activo { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+    ul.arbol { margin: 0; padding-left: 0; list-style: none; font-size: 0.92rem; }
+    ul.arbol li { padding: 3px 0; }
+    .frag { border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; font-size: 0.85rem; }
+    .frag .meta { color: var(--muted); font: 0.75rem var(--mono); margin-bottom: 4px; word-break: break-all; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <h1>aidoc: estructura para IAs</h1>
+    <p>Digerir una vez, usar muchas veces. Pegá una página web, un Markdown o un texto y obtené un paquete <b>aidoc v0.1</b>: texto canónico, secciones, tablas, enlaces, imágenes y fragmentos listos para buscar, cada uno con su huella. Y cuánto se ahorra en tokens.</p>
+  </header>
+
+  <main>
+    <div class="layout">
+      <section class="card" aria-labelledby="t-entrada">
+        <h2 id="t-entrada">Entrada</h2>
+        <div class="row">
+          <select id="tipo" aria-label="Tipo de entrada" style="width:auto">
+            <option value="auto">Detectar tipo</option>
+            <option value="text/html">HTML</option>
+            <option value="text/markdown">Markdown</option>
+            <option value="text/plain">Texto</option>
+          </select>
+          <button id="ejemplo">Cargar ejemplo</button>
+          <button id="abrir-btn">Abrir archivo</button><input type="file" id="abrir" accept=".html,.htm,.md,.markdown,.txt,text/*" hidden>
+        </div>
+        <label for="fuente">Contenido</label>
+        <textarea id="fuente" class="fuente" placeholder="Pegá acá el HTML, Markdown o texto"></textarea>
+        <label for="max">Tamaño máximo de cada fragmento <span class="val" id="v-max"></span></label>
+        <input type="range" id="max" min="200" max="3000" step="100" value="1200">
+        <div class="row" style="margin-top:12px"><button id="convertir" class="primary">Convertir</button></div>
+        <h3>Validar un .aidoc</h3>
+        <p class="small muted" style="margin:0 0 6px">Revisa la forma y que cada fragmento coincida con el texto y con su huella.</p>
+        <button id="validar-btn">Elegir archivo .aidoc.json</button><input type="file" id="validar" accept=".json,application/json" hidden>
+        <p class="small" id="validacion" aria-live="polite"></p>
+      </section>
+
+      <div style="display:grid; gap:16px; min-width:0">
+        <section class="card" aria-live="polite">
+          <h2>Medición</h2>
+          <div class="stats" id="stats"><div class="stat"><div class="k">Todavía nada</div><div class="v">—</div></div></div>
+          <p class="small muted" style="margin:8px 0 0">Tokens estimados con la regla gruesa de 1 token ≈ 4 caracteres: sirve para comparar, no para facturar.</p>
+        </section>
+        <section class="card">
+          <div class="tabs" role="tablist">
+            <button data-tab="texto" class="activo">Texto canónico</button>
+            <button data-tab="estructura">Estructura</button>
+            <button data-tab="fragmentos">Fragmentos</button>
+            <button data-tab="json">Paquete JSON</button>
+          </div>
+          <div id="vista"></div>
+          <div class="row" style="margin-top:12px"><button id="descargar" disabled>Descargar .aidoc.json</button><span class="small muted" id="nombre-archivo"></span></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>Todo se procesa en tu navegador; nada se sube. Las imágenes se listan con su texto alternativo: describirlas (o leer su texto) queda para un paso con un modelo de visión.</footer>
+
+  <script src="src/markdown.js"></script>
+  <script src="src/aidoc.js"></script>
+  <script src="src/ejemplo.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>

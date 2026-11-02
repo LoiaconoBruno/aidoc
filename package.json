@@ -1,0 +1,10 @@
+{
+  "name": "estructura-para-ias",
+  "version": "0.1.0",
+  "description": "Conversor a un paquete pre-digerido para IAs (aidoc v0.1): texto canónico, estructura, fragmentos con huella y medición de tokens",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test"
+  }
+}
