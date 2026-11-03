@@ -1,4 +1,19 @@
-# aidoc: estructura para IAs
+<div align="center">
+
+# aidoc
+
+**Estructura para IAs.** Digerir una vez, usar muchas veces: convierte HTML o Markdown en un paquete pre-digerido para IAs y mide cuántos tokens ahorra.
+
+[**▶ Probala en vivo**](https://loiaconobruno.github.io/aidoc/) · [Cómo funciona](#cómo-funciona) · [Limitaciones](#limitaciones)
+
+[![Tests](https://github.com/LoiaconoBruno/aidoc/actions/workflows/tests.yml/badge.svg)](https://github.com/LoiaconoBruno/aidoc/actions/workflows/tests.yml)
+![Dependencias: 0](https://img.shields.io/badge/dependencias-0-brightgreen)
+![HTML, CSS y JavaScript](https://img.shields.io/badge/HTML%20%C2%B7%20CSS%20%C2%B7%20JS-sin%20build-f7df1e)
+[![Licencia MIT](https://img.shields.io/badge/licencia-MIT-blue)](LICENSE)
+
+<img src="docs/captura.png" alt="Captura de aidoc" width="800">
+
+</div>
 
 Conversor y especificación v0.1 de un **paquete "pre-digerido" para IAs**, para la idea "lenguaje de estructuración nativo para IAs". La propuesta: *digerir una vez, usar muchas veces*. Quien produce un documento genera también una versión estructurada para máquinas, y cualquier IA la usa sin repetir el trabajo de extraer todo.
 
@@ -19,11 +34,23 @@ Leer un formato es barato; lo caro es **interpretarlo**. El estándar tiene que 
 
 ## Instalación
 
-No hace falta instalar nada. Es una página estática sin dependencias. Para correr los tests hace falta Node 18 o más nuevo.
+No hace falta instalar nada: **[abrila en el navegador](https://loiaconobruno.github.io/aidoc/)**.
+
+Para usarla sin conexión o modificarla:
+
+```bash
+git clone https://github.com/LoiaconoBruno/aidoc.git
+```
+
+Después abrí `index.html` con doble clic. No hay dependencias ni paso de build. Para correr los tests hace falta Node 18 o más nuevo:
+
+```bash
+npm test
+```
 
 ## Uso
 
-Abrí `index.html` con doble clic. Todo se procesa en el navegador.
+Abrí la [demo en vivo](https://loiaconobruno.github.io/aidoc/) o `index.html` con doble clic. Todo se procesa en el navegador.
 
 Ejemplo:
 
