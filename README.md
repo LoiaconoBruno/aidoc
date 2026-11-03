@@ -4,7 +4,7 @@
 
 **Estructura para IAs.** Digerir una vez, usar muchas veces: convierte HTML o Markdown en un paquete pre-digerido para IAs y mide cuántos tokens ahorra.
 
-[**▶ Probala en vivo**](https://loiaconobruno.github.io/aidoc/) · [Cómo funciona](#cómo-funciona) · [Limitaciones](#limitaciones)
+[**▶ Probala en vivo**](https://loiaconobruno.github.io/aidoc/) · [**📄 Paper y guía**](https://loiaconobruno.github.io/aidoc/guia.html) · [Cómo funciona](#cómo-funciona) · [Limitaciones](#limitaciones)
 
 [![Tests](https://github.com/LoiaconoBruno/aidoc/actions/workflows/tests.yml/badge.svg)](https://github.com/LoiaconoBruno/aidoc/actions/workflows/tests.yml)
 ![Dependencias: 0](https://img.shields.io/badge/dependencias-0-brightgreen)
@@ -91,6 +91,10 @@ npm test
 - Medir con un tokenizador real en lugar de la estimación.
 - Agregar descripciones de imágenes y transcripciones con modelos, guardando qué modelo las generó.
 - Escribir el resumen del paper: el problema, trabajos relacionados (llms.txt, Schema.org, Docling, MarkItDown), la especificación y la evaluación.
+
+## Paper de uso y guía
+
+[`guia.html`](https://loiaconobruno.github.io/aidoc/guia.html) (fuente en [`docs/guia.md`](docs/guia.md)) tiene un paper de uso paso a paso y una guía de unas 20 páginas sobre la idea de fondo, con citas a los especialistas del tema.
 
 ## Licencia
 
