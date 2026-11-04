@@ -365,7 +365,38 @@ aidoc es memoización a escala de la web: la "función" es interpretar un docume
 
 La memoización funciona cuando el cálculo es caro, el resultado se reusa mucho y la entrada se puede identificar con precisión. Las tres condiciones se cumplen para documentos públicos leídos por IAs: interpretar un PDF complejo con modelos de visión es caro, muchas IAs leen los mismos documentos, y una huella SHA-256 identifica un documento sin ambigüedad.
 
-### 20. Del modelo al código
+### 20. Quién decide qué leen las máquinas
+
+Un formato para IAs plantea una pregunta que no es técnica: si quien publica tiene que decidir cómo leen su contenido las máquinas, también tiene que poder decidir **si** lo leen.
+
+#### 20.1 Robots.txt
+
+En 1994, Martijn Koster propuso en una lista de correo una convención simple: un archivo de texto llamado `robots.txt`, en la raíz de cada sitio, que dijera a los programas que recorren la web (los robots o *crawlers*) qué partes podían visitar y cuáles no. No era un estándar ni tenía fuerza legal; funcionaba porque los buscadores lo respetaban. Durante casi treinta años fue una convención informal, hasta que en 2022 la IETF lo publicó como estándar, el **protocolo de exclusión de robots** (RFC 9309), firmado por Koster, Gary Illyes, Henner Zeller y Lizzi Sassman.
+
+`robots.txt` fue pensado para buscadores, en una época en que dejarse indexar tenía un beneficio claro (aparecer en los resultados). Con el entrenamiento de modelos de lenguaje, el intercambio cambió: los mismos robots, u otros nuevos, recolectan el contenido para entrenar modelos que después pueden responder sin mandar tráfico al sitio original.
+
+#### 20.2 El consentimiento en crisis
+
+Shayne Longpre y colaboradores estudiaron en 2024 cómo cambiaron los archivos `robots.txt` y los términos de servicio de los sitios más usados para entrenar modelos de lenguaje. Encontraron que, en apenas un año, una parte considerable de los sitios más importantes de esas colecciones empezó a restringir el acceso de los robots asociados a empresas de IA, y que esas restricciones eran inconsistentes: los términos de servicio decían una cosa y el `robots.txt` otra. Llamaron al fenómeno una "crisis del consentimiento" en los datos comunes de la web.
+
+Para la idea de aidoc, esto tiene dos lecturas. Por un lado, un formato pre-digerido podría empeorar el problema, al facilitar que las máquinas tomen el contenido. Por otro, podría ser parte de la solución: un paquete que quien publica genera voluntariamente puede incluir **condiciones de uso** explícitas (para qué se permite usarlo, si se permite entrenar, cómo citar), algo que una página web cruda no expresa de manera legible por máquinas. Agregar un campo de licencia y de usos permitidos sería natural en una versión futura de la especificación.
+
+### 21. Medir si un paquete sirve: preguntas y respuestas
+
+La medición de aidoc es de tokens: cuánto ruido se sacó. Pero lo que importa es si una IA **responde mejor** con el paquete que con la página original. Eso se mide con preguntas.
+
+La manera estándar viene de la investigación en comprensión lectora automática. En 2016, Pranav Rajpurkar, Jian Zhang, Konstantin Lopyrev y Percy Liang publicaron SQuAD (*Proceedings of EMNLP*, 2383–2392), un conjunto de más de cien mil preguntas sobre artículos de Wikipedia, cada una con su respuesta marcada en el texto. Un sistema se evalúa por cuántas respuestas encuentra exactamente y por cuánto se superponen sus respuestas con las correctas. SQuAD y sus sucesores fueron durante años el termómetro del progreso en comprensión automática.
+
+Un experimento modesto para aidoc podría seguir esa lógica:
+
+1. Elegir diez páginas reales con ruido (diarios, documentación, tiendas).
+2. Escribir, para cada una, cinco preguntas cuya respuesta esté en el contenido principal, y anotar la respuesta correcta.
+3. Hacerle las mismas preguntas a un modelo de lenguaje tres veces: con la página cruda, con el texto canónico de aidoc y con los fragmentos que un buscador elegiría a partir del paquete.
+4. Medir aciertos, tokens usados y, si se puede, tiempo de respuesta.
+
+El resultado esperable, por la sección 12.3, es que el texto canónico iguale o mejore los aciertos con muchos menos tokens, y que los fragmentos con ruta de títulos funcionen mejor que fragmentos sin contexto. Pero es justamente lo que hay que medir: puede haber casos en los que el conversor pierda información que el modelo habría usado (una tabla mal convertida, un dato en un pie de página). Un experimento así convertiría la tesis de la idea en un resultado, y sería la sección de evaluación del paper que el proyecto se propone escribir.
+
+### 22. Del modelo al código
 
 | Concepto | Función | Archivo |
 |---|---|---|
@@ -390,7 +421,7 @@ A.validar(paquete);             // sin errores
 A.sha256("abc");               // "ba7816bf8f01cfea…"
 ```
 
-### 21. Ejercicios
+### 23. Ejercicios
 
 1. Convertí una página de un diario con publicidad y medí el ahorro. ¿Es mayor o menor que el del ejemplo? ¿Qué quedó de ruido en el texto canónico?
 2. Bajá el tamaño máximo de fragmento a 200 caracteres y convertí el ejemplo. ¿Cuántos fragmentos salen? ¿Alguno corta una idea a la mitad?
@@ -400,7 +431,7 @@ A.sha256("abc");               // "ba7816bf8f01cfea…"
 6. Proponé cómo debería marcarse, en una versión 0.2 de la especificación, que la descripción de una imagen fue generada por un modelo (cuál, cuándo, con qué instrucción).
 7. Probá MarkItDown o Docling con un PDF y compará su salida con lo que haría falta para un paquete aidoc.
 
-### 22. Glosario
+### 24. Glosario
 
 - **Texto canónico:** la versión limpia y única del contenido, en Markdown, a la que se refieren todas las posiciones del paquete.
 - **Boilerplate:** contenido repetitivo de una página que no es el contenido principal.
@@ -417,7 +448,7 @@ A.sha256("abc");               // "ba7816bf8f01cfea…"
 - **Memoización:** guardar el resultado de un cálculo para reusarlo.
 - **JSON Schema:** vocabulario para describir y validar la forma de documentos JSON.
 
-### 23. Conclusión
+### 25. Conclusión
 
 La idea de un formato nativo para IAs retoma una tradición de sesenta años: separar el contenido de su presentación, como propusieron Tunnicliffe y Goldfarb con la marcación genérica, y describir su significado para que lo usen máquinas, como propusieron Berners-Lee, Hendler y Lassila con la web semántica. Lo nuevo es el consumidor: modelos de lenguaje que leen en tokens, buscan en fragmentos y se pierden en contextos largos y ruidosos, como mostraron Lewis y colaboradores con RAG y Liu y colaboradores con la información perdida en el medio.
 
@@ -437,14 +468,17 @@ aidoc es una especificación mínima y un conversor de referencia que muestran q
 - ISO. (2012). *ISO 14721:2012. Space data and information transfer systems — Open archival information system (OAIS) — Reference model*. International Organization for Standardization.
 - ISO. (2017). *ISO 15836-1:2017. Information and documentation — The Dublin Core metadata element set*. International Organization for Standardization.
 - Kohlschütter, C., Fankhauser, P., & Nejdl, W. (2010). Boilerplate detection using shallow text features. En *Proceedings of the Third ACM International Conference on Web Search and Data Mining* (pp. 441–450). ACM. https://doi.org/10.1145/1718487.1718542
+- Koster, M., Illyes, G., Zeller, H., & Sassman, L. (2022). *Robots Exclusion Protocol* (RFC 9309). Internet Engineering Task Force. https://doi.org/10.17487/RFC9309
 - Levenshtein, V. I. (1966). Binary codes capable of correcting deletions, insertions, and reversals. *Soviet Physics Doklady*, 10(8), 707–710.
 - Lewis, P., Perez, E., Piktus, A., Petroni, F., Karpukhin, V., Goyal, N., et al. (2020). Retrieval-augmented generation for knowledge-intensive NLP tasks. *Advances in Neural Information Processing Systems*, 33, 9459–9474.
 - Liu, N. F., Lin, K., Hewitt, J., Paranjape, A., Bevilacqua, M., Petroni, F., & Liang, P. (2024). Lost in the middle: How language models use long contexts. *Transactions of the Association for Computational Linguistics*, 12, 157–173. https://doi.org/10.1162/tacl_a_00638
+- Longpre, S., Mahari, R., Lee, A., Lund, C., Oderinwale, H., Brannon, W., et al. (2024). *Consent in Crisis: The Rapid Decline of the AI Data Commons*. arXiv:2407.14933. https://doi.org/10.48550/arXiv.2407.14933
 - MacFarlane, J. (2014–2024). *CommonMark Spec*. https://spec.commonmark.org
 - Merkle, R. C. (1988). A digital signature based on a conventional encryption function. En *Advances in Cryptology — CRYPTO '87* (pp. 369–378). Springer. https://doi.org/10.1007/3-540-48184-2_32
 - Michie, D. (1968). "Memo" functions and machine learning. *Nature*, 218, 19–22. https://doi.org/10.1038/218019a0
 - NIST. (2015). *FIPS PUB 180-4: Secure Hash Standard (SHS)*. National Institute of Standards and Technology. https://doi.org/10.6028/NIST.FIPS.180-4
 - Radford, A., Kim, J. W., Xu, T., Brockman, G., McLeavey, C., & Sutskever, I. (2023). Robust speech recognition via large-scale weak supervision. En *Proceedings of the 40th International Conference on Machine Learning* (pp. 28492–28518). PMLR.
+- Rajpurkar, P., Zhang, J., Lopyrev, K., & Liang, P. (2016). SQuAD: 100,000+ questions for machine comprehension of text. En *Proceedings of the 2016 Conference on Empirical Methods in Natural Language Processing* (pp. 2383–2392). https://doi.org/10.18653/v1/D16-1264
 - Rivest, R. L., Shamir, A., & Adleman, L. (1978). A method for obtaining digital signatures and public-key cryptosystems. *Communications of the ACM*, 21(2), 120–126. https://doi.org/10.1145/359340.359342
 - Sennrich, R., Haddow, B., & Birch, A. (2016). Neural machine translation of rare words with subword units. En *Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics* (pp. 1715–1725). https://doi.org/10.18653/v1/P16-1162
 - Smith, R. (2007). An overview of the Tesseract OCR engine. En *Proceedings of the Ninth International Conference on Document Analysis and Recognition* (vol. 2, pp. 629–633). IEEE. https://doi.org/10.1109/ICDAR.2007.4376991
