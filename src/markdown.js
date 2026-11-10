@@ -43,6 +43,8 @@ const Markdown = (() => {
       }
       if (!nombre) {
         if (todo.startsWith("<!")) continue;
+        // Dentro de una tabla, solo cuenta el texto de las celdas y del título (caption).
+        if (tabla && !pila.some((b) => b.celda || b.caption)) continue;
         const t = decodificar(todo);
         add(pre ? t : t.replace(/\s+/g, " "));
         continue;
@@ -77,11 +79,19 @@ const Markdown = (() => {
           } else pila.push({ texto: "", href: atributo(attrs, "href") });
           break;
         case "img": add(`![${atributo(attrs, "alt")}](${atributo(attrs, "src")})`); break;
+        case "caption":
+          if (tabla) {
+            if (!cierra) pila.push({ texto: "", caption: true });
+            else if (pila[pila.length - 1].caption) tabla.titulo = pila.pop().texto.replace(/\s+/g, " ").trim();
+          }
+          break;
         case "table":
-          if (!cierra) { tabla = { filas: [], fila: null }; add("\n\n"); }
+          if (!cierra) { tabla = { filas: [], fila: null, titulo: "" }; add("\n\n"); }
           else if (tabla) {
             const filas = tabla.filas.filter((f) => f.length);
+            const titulo = tabla.titulo;
             tabla = null;
+            if (titulo) add(`**${titulo}**\n\n`);
             if (filas.length) {
               const ancho = Math.max(...filas.map((f) => f.length));
               const linea = (f) => "| " + Array.from({ length: ancho }, (_, i) => (f[i] || "").replace(/\|/g, "\\|")).join(" | ") + " |";

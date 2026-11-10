@@ -85,3 +85,9 @@ test("detectar tipo e idioma", () => {
   assert.equal(A.detectarTipo("solo una línea"), "text/plain");
   assert.equal(A.idioma("The cat is on the table and it is for the kids"), "en");
 });
+
+test("tablas con título (caption): el título va antes y la tabla queda bien formada", () => {
+  const md = MD.desdeHtml("<table>\n  <caption>Capacidad</caption>\n  <tr><th>Modo</th><th>Máximo</th></tr>\n  <tr><td>Numérico</td><td>7089</td></tr>\n</table>");
+  assert.match(md, /^\*\*Capacidad\*\*\n\n\| Modo \| Máximo \|\n\| --- \| --- \|\n\| Numérico \| 7089 \|$/m);
+  assert.deepEqual(MD.tablas(md)[0], { encabezados: ["Modo", "Máximo"], filas: [["Numérico", "7089"]] });
+});
