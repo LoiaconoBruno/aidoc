@@ -1,7 +1,7 @@
 {
   "name": "aidoc",
-  "version": "0.1.0",
-  "description": "Paquete pre-digerido para IAs: texto canónico, secciones, fragmentos con SHA-256 y medición de tokens.",
+  "version": "0.2.0",
+  "description": "Paquete pre-digerido para IAs: texto canónico, secciones, fragmentos con SHA-256, medición de tokens (estimada o con Claude) y validación con JSON Schema 2020-12.",
   "private": true,
   "license": "MIT",
   "scripts": {
