@@ -1,0 +1,7 @@
+# GitHub Pages: no publicar las copias de documentos de terceros ni los archivos de prueba.
+exclude:
+  - bench
+  - test
+  - tools
+  - package.json
+  - README.md

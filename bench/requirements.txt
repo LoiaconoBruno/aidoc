@@ -1,0 +1,5 @@
+docling==2.150.0
+markitdown==0.1.9
+tiktoken==0.14.0
+beautifulsoup4==4.15.0
+anthropic==2.8.0

@@ -1,0 +1,57 @@
+[
+  {
+    "id": "wikipedia-codigo-qr",
+    "titulo": "Código QR (Wikipedia en español)",
+    "archivo": "docs/wikipedia-codigo-qr.html",
+    "url": "https://es.wikipedia.org/wiki/C%C3%B3digo_QR",
+    "licencia": "CC BY-SA 4.0",
+    "licenciaUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "contenido": "#mw-content-text",
+    "titulos": "h1, h2, h3, h4, h5, h6",
+    "notas": "Artículo con infobox, tablas, imágenes y referencias; alrededor, el menú y el pie de Wikipedia."
+  },
+  {
+    "id": "mdn-table",
+    "titulo": "MDN: el elemento `<table>`",
+    "archivo": "docs/mdn-table.html",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/table",
+    "licencia": "CC BY-SA 2.5",
+    "licenciaUrl": "https://creativecommons.org/licenses/by-sa/2.5/",
+    "contenido": "main",
+    "titulos": "h1, h2, h3, h4, h5, h6",
+    "notas": "Referencia técnica con muchos ejemplos de código y tablas; alrededor, la navegación de MDN."
+  },
+  {
+    "id": "python-estructuras",
+    "titulo": "5. Data Structures (tutorial de Python)",
+    "archivo": "docs/python-estructuras.html",
+    "url": "https://docs.python.org/3/tutorial/datastructures.html",
+    "licencia": "PSF License (documentación de Python)",
+    "licenciaUrl": "https://docs.python.org/3/license.html",
+    "contenido": "div[role=main]",
+    "titulos": "h1, h2, h3, h4, h5, h6",
+    "notas": "Tutorial con bloques de código interactivos; alrededor, la barra lateral y el índice."
+  },
+  {
+    "id": "rfc8259",
+    "titulo": "RFC 8259: The JSON Data Interchange Format",
+    "archivo": "docs/rfc8259.html",
+    "url": "https://www.rfc-editor.org/rfc/rfc8259.html",
+    "licencia": "IETF Trust Legal Provisions (los RFC se pueden copiar completos)",
+    "licenciaUrl": "https://trustee.ietf.org/documents/trust-legal-provisions/",
+    "contenido": null,
+    "titulos": "span.h1, span.h2, span.h3, span.h4",
+    "notas": "HTML heredado: todo el texto va en <pre> y los títulos son <span class=\"h2\">, no <h2>. No hay menú ni pie: no se mide ruido."
+  },
+  {
+    "id": "markitdown-readme",
+    "titulo": "README de MarkItDown (Markdown)",
+    "archivo": "docs/markitdown-readme.md",
+    "url": "https://raw.githubusercontent.com/microsoft/markitdown/ed178952a6672abdfd35b5f9e76a80b6cefc086e/README.md",
+    "licencia": "MIT",
+    "licenciaUrl": "https://github.com/microsoft/markitdown/blob/ed178952a6672abdfd35b5f9e76a80b6cefc086e/LICENSE",
+    "contenido": null,
+    "titulos": null,
+    "notas": "Entrada en Markdown: los títulos y enlaces de referencia salen del propio Markdown. No se mide ruido."
+  }
+]

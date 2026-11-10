@@ -1,0 +1,411 @@
+{
+  "fecha": "2026-11-10",
+  "equipo": "macOS (Darwin 25.5.0), arm64",
+  "versiones": {
+    "aidoc": "0.2.0",
+    "docling": "2.150.0",
+    "markitdown": "0.1.9",
+    "tiktoken": "0.14.0",
+    "python": "3.13.3",
+    "node": "v24.10.0"
+  },
+  "tokenizador": "o200k_base (tiktoken)",
+  "claude": null,
+  "repeticiones": 5,
+  "arranqueMs": {
+    "Docling": 5298.049459001049,
+    "MarkItDown": 192.66495799820404
+  },
+  "documentos": [
+    {
+      "id": "wikipedia-codigo-qr",
+      "titulo": "Código QR (Wikipedia en español)",
+      "caracteres": 165438,
+      "tokensOriginal": 49670,
+      "herramientas": {
+        "aidoc": {
+          "tokens": 10503,
+          "caracteres": 35532,
+          "ms": 7.824375000000003,
+          "calidad": {
+            "titulos": [
+              18,
+              18
+            ],
+            "tablas": [
+              3,
+              3
+            ],
+            "enlaces": [
+              144,
+              144
+            ],
+            "cobertura": 1.0,
+            "ruido": 0.4873417721518987
+          }
+        },
+        "Docling": {
+          "tokens": 10472,
+          "caracteres": 36064,
+          "ms": 120.56154199672164,
+          "calidad": {
+            "titulos": [
+              18,
+              18
+            ],
+            "tablas": [
+              3,
+              3
+            ],
+            "enlaces": [
+              125,
+              144
+            ],
+            "cobertura": 1.0,
+            "ruido": 0.6835443037974683
+          }
+        },
+        "MarkItDown": {
+          "tokens": 14199,
+          "caracteres": 47179,
+          "ms": 45.42795800080057,
+          "calidad": {
+            "titulos": [
+              18,
+              18
+            ],
+            "tablas": [
+              3,
+              3
+            ],
+            "enlaces": [
+              141,
+              144
+            ],
+            "cobertura": 1.0,
+            "ruido": 1.0
+          }
+        }
+      },
+      "referencia": {
+        "titulos": 18,
+        "tablas": 3,
+        "enlaces": 144,
+        "palabras": 809,
+        "ruido": 158
+      }
+    },
+    {
+      "id": "mdn-table",
+      "titulo": "MDN: el elemento `<table>`",
+      "caracteres": 247819,
+      "tokensOriginal": 69846,
+      "herramientas": {
+        "aidoc": {
+          "tokens": 13550,
+          "caracteres": 45955,
+          "ms": 10.497249999999994,
+          "calidad": {
+            "titulos": [
+              42,
+              43
+            ],
+            "tablas": [
+              2,
+              2
+            ],
+            "enlaces": [
+              75,
+              75
+            ],
+            "cobertura": 0.9985272459499264,
+            "ruido": 0.051181102362204724
+          }
+        },
+        "Docling": {
+          "tokens": 20087,
+          "caracteres": 70077,
+          "ms": 197.80174999323208,
+          "calidad": {
+            "titulos": [
+              42,
+              43
+            ],
+            "tablas": [
+              2,
+              2
+            ],
+            "enlaces": [
+              75,
+              75
+            ],
+            "cobertura": 1.0,
+            "ruido": 0.6535433070866141
+          }
+        },
+        "MarkItDown": {
+          "tokens": 22209,
+          "caracteres": 74035,
+          "ms": 65.3829169968958,
+          "calidad": {
+            "titulos": [
+              43,
+              43
+            ],
+            "tablas": [
+              2,
+              2
+            ],
+            "enlaces": [
+              75,
+              75
+            ],
+            "cobertura": 1.0,
+            "ruido": 1.0
+          }
+        }
+      },
+      "referencia": {
+        "titulos": 43,
+        "tablas": 2,
+        "enlaces": 75,
+        "palabras": 679,
+        "ruido": 254
+      }
+    },
+    {
+      "id": "python-estructuras",
+      "titulo": "5. Data Structures (tutorial de Python)",
+      "caracteres": 110941,
+      "tokensOriginal": 34152,
+      "herramientas": {
+        "aidoc": {
+          "tokens": 8484,
+          "caracteres": 30107,
+          "ms": 7.5247500000000045,
+          "calidad": {
+            "titulos": [
+              14,
+              14
+            ],
+            "tablas": [
+              0,
+              0
+            ],
+            "enlaces": [
+              30,
+              30
+            ],
+            "cobertura": 1.0,
+            "ruido": 1.0
+          }
+        },
+        "Docling": {
+          "tokens": 8833,
+          "caracteres": 31269,
+          "ms": 161.2079159967834,
+          "calidad": {
+            "titulos": [
+              14,
+              14
+            ],
+            "tablas": [
+              0,
+              0
+            ],
+            "enlaces": [
+              30,
+              30
+            ],
+            "cobertura": 1.0,
+            "ruido": 1.0
+          }
+        },
+        "MarkItDown": {
+          "tokens": 9258,
+          "caracteres": 32176,
+          "ms": 57.805791999271605,
+          "calidad": {
+            "titulos": [
+              14,
+              14
+            ],
+            "tablas": [
+              0,
+              0
+            ],
+            "enlaces": [
+              30,
+              30
+            ],
+            "cobertura": 1.0,
+            "ruido": 1.0
+          }
+        }
+      },
+      "referencia": {
+        "titulos": 14,
+        "tablas": 0,
+        "enlaces": 30,
+        "palabras": 663,
+        "ruido": 33
+      }
+    },
+    {
+      "id": "rfc8259",
+      "titulo": "RFC 8259: The JSON Data Interchange Format",
+      "caracteres": 37946,
+      "tokensOriginal": 10599,
+      "herramientas": {
+        "aidoc": {
+          "tokens": 8393,
+          "caracteres": 31370,
+          "ms": 3.196084000000006,
+          "calidad": {
+            "titulos": [
+              0,
+              24
+            ],
+            "tablas": [
+              0,
+              0
+            ],
+            "enlaces": [
+              28,
+              28
+            ],
+            "cobertura": 1.0,
+            "ruido": null
+          }
+        },
+        "Docling": {
+          "tokens": 8540,
+          "caracteres": 31864,
+          "ms": 41.04699999879813,
+          "calidad": {
+            "titulos": [
+              0,
+              24
+            ],
+            "tablas": [
+              0,
+              0
+            ],
+            "enlaces": [
+              28,
+              28
+            ],
+            "cobertura": 1.0,
+            "ruido": null
+          }
+        },
+        "MarkItDown": {
+          "tokens": 7133,
+          "caracteres": 28371,
+          "ms": 12.100916996132582,
+          "calidad": {
+            "titulos": [
+              0,
+              24
+            ],
+            "tablas": [
+              0,
+              0
+            ],
+            "enlaces": [
+              15,
+              28
+            ],
+            "cobertura": 1.0,
+            "ruido": null
+          }
+        }
+      },
+      "referencia": {
+        "titulos": 24,
+        "tablas": 0,
+        "enlaces": 28,
+        "palabras": 677,
+        "ruido": null
+      }
+    },
+    {
+      "id": "markitdown-readme",
+      "titulo": "README de MarkItDown (Markdown)",
+      "caracteres": 21397,
+      "tokensOriginal": 4765,
+      "herramientas": {
+        "aidoc": {
+          "tokens": 4761,
+          "caracteres": 21389,
+          "ms": 2.3415,
+          "calidad": {
+            "titulos": [
+              23,
+              23
+            ],
+            "tablas": [
+              2,
+              2
+            ],
+            "enlaces": [
+              18,
+              18
+            ],
+            "cobertura": 1.0,
+            "ruido": null
+          }
+        },
+        "Docling": {
+          "tokens": 4692,
+          "caracteres": 21553,
+          "ms": 100.02862500550691,
+          "calidad": {
+            "titulos": [
+              23,
+              23
+            ],
+            "tablas": [
+              2,
+              2
+            ],
+            "enlaces": [
+              16,
+              18
+            ],
+            "cobertura": 0.9938366718027735,
+            "ruido": null
+          }
+        },
+        "MarkItDown": {
+          "tokens": 4765,
+          "caracteres": 21397,
+          "ms": 4.6650420044898055,
+          "calidad": {
+            "titulos": [
+              23,
+              23
+            ],
+            "tablas": [
+              2,
+              2
+            ],
+            "enlaces": [
+              18,
+              18
+            ],
+            "cobertura": 1.0,
+            "ruido": null
+          }
+        }
+      },
+      "referencia": {
+        "titulos": 23,
+        "tablas": 2,
+        "enlaces": 18,
+        "palabras": 649,
+        "ruido": null
+      }
+    }
+  ]
+}
