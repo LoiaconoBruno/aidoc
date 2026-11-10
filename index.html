@@ -1,78 +1,200 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-AR">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>aidoc: estructura para IAs</title>
+  <title>aidoc · estructura para IAs</title>
+  <meta name="description" content="Convertí una página web o un Markdown en un paquete .aidoc.json pre-digerido para IAs: texto limpio, estructura, fragmentos con huella y cuántos tokens ahorra. Todo en tu navegador.">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f6f8">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e1015">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233a4bd6'/%3E%3Cpath d='M12 9c-3 0-3 2-3 4s-1 3-2 3c1 0 2 1 2 3s0 4 3 4M20 9c3 0 3 2 3 4s1 3 2 3c-1 0-2 1-2 3s0 4-3 4' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/sistema.css">
   <link rel="stylesheet" href="styles.css">
-  <style>
-    textarea.fuente { font-family: var(--mono); font-size: 0.8rem; min-height: 260px; }
-    pre.salida { background: var(--surface-2); border-radius: 8px; padding: 12px; overflow: auto; max-height: 520px; font: 0.8rem/1.5 var(--mono); white-space: pre-wrap; word-break: break-word; margin: 0; }
-    .tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; }
-    .tabs button.activo { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
-    ul.arbol { margin: 0; padding-left: 0; list-style: none; font-size: 0.92rem; }
-    ul.arbol li { padding: 3px 0; }
-    .frag { border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; font-size: 0.85rem; }
-    .frag .meta { color: var(--muted); font: 0.75rem var(--mono); margin-bottom: 4px; word-break: break-all; }
-  </style>
+  <script src="src/markdown.js" defer></script>
+  <script src="src/esquema.js" defer></script>
+  <script src="src/esquema-aidoc.js" defer></script>
+  <script src="src/aidoc.js" defer></script>
+  <script src="src/claude.js" defer></script>
+  <script src="src/ejemplo.js" defer></script>
+  <script src="src/app.js" defer></script>
 </head>
 <body>
-  <header class="top">
-    <h1>aidoc: estructura para IAs</h1>
-    <p>Digerir una vez, usar muchas veces. Pegá una página web, un Markdown o un texto y obtené un paquete <b>aidoc v0.1</b>: texto canónico, secciones, tablas, enlaces, imágenes y fragmentos listos para buscar, cada uno con su huella. Y cuánto se ahorra en tokens.</p>
-    <p class="guia-link"><a href="guia.html">📄 Paper de uso y guía de la idea →</a></p>
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+  <header class="cabecera">
+    <div class="contenedor cabecera__fila">
+      <a class="marca" href="./">
+        <svg aria-hidden="true" width="28" height="28" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="currentColor"/><path d="M12 9c-3 0-3 2-3 4s-1 3-2 3c1 0 2 1 2 3s0 4 3 4M20 9c3 0 3 2 3 4s1 3 2 3c-1 0-2 1-2 3s0 4-3 4" fill="none" stroke="var(--superficie)" stroke-width="2.4" stroke-linecap="round"/></svg>
+        aidoc
+      </a>
+      <nav aria-label="Enlaces">
+        <a href="guia.html">Paper y guía</a>
+        <a href="spec/aidoc-0.1.schema.json">Especificación</a>
+        <a href="https://github.com/LoiaconoBruno/aidoc">Código</a>
+      </nav>
+    </div>
   </header>
 
-  <main>
-    <div class="layout">
-      <section class="card" aria-labelledby="t-entrada">
-        <h2 id="t-entrada">Entrada</h2>
-        <div class="row">
-          <select id="tipo" aria-label="Tipo de entrada" style="width:auto">
-            <option value="auto">Detectar tipo</option>
-            <option value="text/html">HTML</option>
-            <option value="text/markdown">Markdown</option>
-            <option value="text/plain">Texto</option>
-          </select>
-          <button id="ejemplo">Cargar ejemplo</button>
-          <button id="abrir-btn">Abrir archivo</button><input type="file" id="abrir" accept=".html,.htm,.md,.markdown,.txt,text/*" hidden>
-        </div>
-        <label for="fuente">Contenido</label>
-        <textarea id="fuente" class="fuente" placeholder="Pegá acá el HTML, Markdown o texto"></textarea>
-        <label for="max">Tamaño máximo de cada fragmento <span class="val" id="v-max"></span></label>
-        <input type="range" id="max" min="200" max="3000" step="100" value="1200">
-        <div class="row" style="margin-top:12px"><button id="convertir" class="primary">Convertir</button></div>
-        <h3>Validar un .aidoc</h3>
-        <p class="small muted" style="margin:0 0 6px">Revisa la forma y que cada fragmento coincida con el texto y con su huella.</p>
-        <button id="validar-btn">Elegir archivo .aidoc.json</button><input type="file" id="validar" accept=".json,application/json" hidden>
-        <p class="small" id="validacion" aria-live="polite"></p>
+  <main id="contenido" tabindex="-1">
+    <div class="contenedor">
+      <section class="intro" aria-labelledby="titulo">
+        <h1 id="titulo">Digerir una vez, usar muchas veces</h1>
+        <p>Convertí una página web o un Markdown en un paquete <code>.aidoc.json</code> pre-digerido para IAs: texto limpio, estructura, fragmentos con huella y cuántos tokens se ahorran.</p>
       </section>
 
-      <div style="display:grid; gap:16px; min-width:0">
-        <section class="card" aria-live="polite">
-          <h2>Medición</h2>
-          <div class="stats" id="stats"><div class="stat"><div class="k">Todavía nada</div><div class="v">—</div></div></div>
-          <p class="small muted" style="margin:8px 0 0">Tokens estimados con la regla gruesa de 1 token ≈ 4 caracteres: sirve para comparar, no para facturar.</p>
-        </section>
-        <section class="card">
-          <div class="tabs" role="tablist">
-            <button data-tab="texto" class="activo">Texto canónico</button>
-            <button data-tab="estructura">Estructura</button>
-            <button data-tab="fragmentos">Fragmentos</button>
-            <button data-tab="json">Paquete JSON</button>
+      <section class="panel entrada" aria-labelledby="t-entrada">
+        <h2 id="t-entrada" class="visualmente-oculto">Entrada</h2>
+        <div class="soltar" id="soltar">
+          <svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24"><path d="M12 15V4M7 9l5-5 5 5M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <p class="soltar__titulo">Soltá acá un <code>.html</code>, <code>.md</code> o <code>.txt</code> para convertirlo</p>
+          <p class="soltar__ayuda">O un <code>.aidoc.json</code> para validarlo. Nada se sube: todo pasa en tu navegador.</p>
+          <div class="acciones">
+            <label class="btn btn--primario" for="archivo">Elegir archivo</label>
+            <input id="archivo" class="visualmente-oculto" type="file" accept=".html,.htm,.md,.markdown,.txt,.json,text/*,application/json">
+            <button type="button" class="btn" id="pegar-btn" aria-expanded="false" aria-controls="pegar">Pegar contenido</button>
+            <button type="button" class="btn btn--fantasma" id="ejemplo">Cargar ejemplo</button>
           </div>
-          <div id="vista"></div>
-          <div class="row" style="margin-top:12px"><button id="descargar" disabled>Descargar .aidoc.json</button><span class="small muted" id="nombre-archivo"></span></div>
-        </section>
-      </div>
+        </div>
+
+        <div class="pegar" id="pegar" hidden>
+          <div class="campo">
+            <label for="fuente">Contenido: HTML, Markdown o texto</label>
+            <textarea id="fuente" rows="10" spellcheck="false"></textarea>
+          </div>
+          <button type="button" class="btn btn--primario" id="convertir">Convertir</button>
+        </div>
+
+        <details class="opciones">
+          <summary>Opciones de conversión</summary>
+          <div class="opciones__grilla">
+            <div class="campo">
+              <label for="tipo">Tipo de entrada</label>
+              <select id="tipo">
+                <option value="auto">Detectar solo</option>
+                <option value="text/html">HTML</option>
+                <option value="text/markdown">Markdown</option>
+                <option value="text/plain">Texto</option>
+              </select>
+            </div>
+            <div class="campo">
+              <label for="max">Tamaño máximo de cada fragmento: <output id="v-max" for="max">1200</output> caracteres</label>
+              <input id="max" type="range" min="200" max="3000" step="100" value="1200">
+            </div>
+          </div>
+        </details>
+
+        <div class="aviso" id="aviso" role="status" hidden></div>
+      </section>
+
+      <section class="validacion panel" id="validacion" aria-labelledby="t-validacion" hidden>
+        <h2 id="t-validacion">Validación</h2>
+        <div id="validacion-salida" aria-live="polite"></div>
+      </section>
+
+      <section class="resultado" id="resultado" aria-labelledby="t-resultado" hidden>
+        <h2 id="t-resultado" class="visualmente-oculto">Resultado</h2>
+
+        <div class="panel medicion" aria-live="polite">
+          <p class="medicion__archivo" id="archivo-nombre"></p>
+          <div class="medicion__cifras">
+            <div class="cifra">
+              <span class="cifra__k">Original</span>
+              <span class="cifra__v" id="tok-original">—</span>
+              <span class="cifra__u">tokens</span>
+            </div>
+            <svg class="cifra__flecha" aria-hidden="true" width="28" height="28" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="cifra">
+              <span class="cifra__k">Texto canónico</span>
+              <span class="cifra__v" id="tok-texto">—</span>
+              <span class="cifra__u">tokens</span>
+            </div>
+            <div class="cifra cifra--ahorro">
+              <span class="cifra__k">Ahorro</span>
+              <span class="cifra__v" id="ahorro">—</span>
+            </div>
+          </div>
+          <div class="medicion__metodo">
+            <span class="chip" id="metodo"></span>
+            <button type="button" class="btn btn--fantasma" id="contar">Contar con Claude</button>
+          </div>
+          <p class="campo__ayuda" id="contar-estado" aria-live="polite"></p>
+          <ul class="medicion__resumen" id="resumen"></ul>
+          <div class="acciones">
+            <button type="button" class="btn btn--primario" id="descargar">Descargar .aidoc.json</button>
+            <span class="chip" id="validez"></span>
+          </div>
+        </div>
+
+        <div class="vista" id="vista" data-ver="resultado">
+          <div class="pestanas vista__selector" role="tablist" aria-label="Qué panel ver">
+            <button type="button" role="tab" id="ver-original" aria-selected="false" aria-controls="panel-original">Original</button>
+            <button type="button" role="tab" id="ver-resultado" aria-selected="true" aria-controls="panel-resultado">Resultado</button>
+          </div>
+
+          <section class="panel vista__panel" id="panel-original" aria-labelledby="t-original">
+            <h3 id="t-original" class="vista__titulo">Original <span class="chip" id="chip-original"></span></h3>
+            <pre class="codigo" id="original" tabindex="0" aria-label="Contenido original"></pre>
+          </section>
+
+          <section class="panel vista__panel" id="panel-resultado" aria-labelledby="t-paquete">
+            <h3 id="t-paquete" class="vista__titulo">Paquete <span class="chip" id="chip-texto"></span></h3>
+            <div class="pestanas" role="tablist" aria-label="Partes del paquete" id="pestanas">
+              <button type="button" role="tab" id="tab-texto" aria-controls="p-texto" aria-selected="true">Texto</button>
+              <button type="button" role="tab" id="tab-estructura" aria-controls="p-estructura" aria-selected="false" tabindex="-1">Estructura</button>
+              <button type="button" role="tab" id="tab-fragmentos" aria-controls="p-fragmentos" aria-selected="false" tabindex="-1">Fragmentos</button>
+              <button type="button" role="tab" id="tab-imagenes" aria-controls="p-imagenes" aria-selected="false" tabindex="-1">Imágenes</button>
+              <button type="button" role="tab" id="tab-json" aria-controls="p-json" aria-selected="false" tabindex="-1">JSON</button>
+            </div>
+            <div role="tabpanel" id="p-texto" aria-labelledby="tab-texto">
+              <pre class="codigo" id="texto" tabindex="0" aria-label="Texto canónico"></pre>
+            </div>
+            <div role="tabpanel" id="p-estructura" aria-labelledby="tab-estructura" hidden>
+              <p class="campo__ayuda">Tocá una sección para verla en el texto.</p>
+              <ol class="arbol" id="arbol"></ol>
+              <div id="extras"></div>
+            </div>
+            <div role="tabpanel" id="p-fragmentos" aria-labelledby="tab-fragmentos" hidden>
+              <p class="campo__ayuda">Partes listas para indexar en una búsqueda. Tocá una para verla en el texto.</p>
+              <ol class="fragmentos" id="fragmentos"></ol>
+            </div>
+            <div role="tabpanel" id="p-imagenes" aria-labelledby="tab-imagenes" hidden>
+              <p class="campo__ayuda" id="imagenes-ayuda"></p>
+              <ol class="imagenes" id="imagenes"></ol>
+              <input id="imagen-archivo" class="visualmente-oculto" type="file" accept="image/png,image/jpeg,image/gif,image/webp" tabindex="-1" aria-hidden="true">
+            </div>
+            <div role="tabpanel" id="p-json" aria-labelledby="tab-json" hidden>
+              <pre class="codigo" id="json" tabindex="0" aria-label="Paquete JSON"></pre>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel claude" id="claude" aria-labelledby="t-claude">
+        <h2 id="t-claude">Conectar con Claude <span class="chip">opcional</span></h2>
+        <p>Con tu propia key de la API de Anthropic podés contar los tokens reales del modelo (el conteo es gratis) y describir las imágenes (se cobra a tu cuenta). Sin key, aidoc usa la estimación de 1 token cada 4 caracteres.</p>
+        <div class="claude__grilla">
+          <div class="campo">
+            <label for="key">Tu key de la API</label>
+            <input id="key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…" aria-describedby="key-ayuda">
+            <p class="campo__ayuda" id="key-ayuda">Va directo de tu navegador a api.anthropic.com. No pasa por ningún servidor nuestro.</p>
+          </div>
+          <div class="campo">
+            <label for="modelo">Modelo</label>
+            <select id="modelo" aria-describedby="modelo-ayuda"></select>
+            <p class="campo__ayuda" id="modelo-ayuda"></p>
+          </div>
+        </div>
+        <label class="opcion"><input type="checkbox" id="recordar"> Recordar la key en este navegador</label>
+        <p class="campo__ayuda">Si no la recordás, se borra al cerrar la pestaña. <button type="button" class="enlace-boton" id="olvidar">Olvidar la key ahora</button></p>
+      </section>
     </div>
   </main>
 
-  <footer>Todo se procesa en tu navegador; nada se sube. Las imágenes se listan con su texto alternativo: describirlas (o leer su texto) queda para un paso con un modelo de visión.</footer>
-
-  <script src="src/markdown.js"></script>
-  <script src="src/aidoc.js"></script>
-  <script src="src/ejemplo.js"></script>
-  <script src="src/app.js"></script>
+  <footer class="pie">
+    <div class="contenedor">
+      <p>Todo se procesa en tu navegador. Solo si ponés tu key, el texto o la imagen que elijas viaja a la API de Anthropic.</p>
+      <p><a href="guia.html">Paper de uso y guía</a> · <a href="spec/aidoc-0.1.schema.json">Especificación aidoc 0.1</a> · <a href="https://github.com/LoiaconoBruno/aidoc">Código en GitHub</a> · Licencia MIT</p>
+    </div>
+  </footer>
 </body>
 </html>

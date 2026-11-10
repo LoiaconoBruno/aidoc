@@ -2,9 +2,12 @@
 // Digerir una vez, usar muchas veces: texto canónico en Markdown, metadatos,
 // secciones, tablas, enlaces, imágenes (con lugar para su descripción) y
 // fragmentos listos para búsqueda, cada uno con su huella SHA-256.
-// La especificación formal está en spec/aidoc-0.1.schema.json.
+// La especificación formal está en spec/aidoc-0.1.schema.json (JSON Schema 2020-12).
 const Aidoc = (() => {
   const MD = typeof Markdown !== "undefined" ? Markdown : require("./markdown.js");
+  const JS = typeof Esquema !== "undefined" ? Esquema : require("./esquema.js");
+  const ESQUEMA = typeof EsquemaAidoc !== "undefined" ? EsquemaAidoc : require("./esquema-aidoc.js");
+  const METODO_ESTIMADO = "1 token ≈ 4 caracteres";
   const VERSION = "0.1";
 
   // --- SHA-256 en JavaScript puro (síncrono, sin depender de crypto.subtle) ---
@@ -112,30 +115,63 @@ const Aidoc = (() => {
       fragmentos: fragmentar(texto, secs, maxCaracteres),
       tablas: MD.tablas(texto),
       enlaces: links.filter((l) => !l.imagen).map(({ texto: tx, url }) => ({ texto: tx, url })),
-      imagenes: links.filter((l) => l.imagen).map(({ texto: alt, url }) => ({ alt, src: url, descripcion: null, textoDetectado: null })),
-      medicion: { metodo: "1 token ≈ 4 caracteres", tokensOriginal: tOrig, tokensTexto: tTexto, ahorro: tOrig ? 1 - tTexto / tOrig : 0 },
+      imagenes: links.filter((l) => l.imagen).map(({ texto: alt, url }) => ({ alt, src: url, descripcion: null, textoDetectado: null, descripcionModelo: null })),
+      medicion: { metodo: METODO_ESTIMADO, tokensOriginal: tOrig, tokensTexto: tTexto, ahorro: tOrig ? 1 - tTexto / tOrig : 0 },
     };
   }
 
-  // Revisa la forma y la integridad: que cada fragmento coincida con el texto y con su huella.
+  // Validación completa: primero el esquema JSON (spec/aidoc-0.1.schema.json, con
+  // "date-time" exigido), después la integridad que un esquema no puede expresar:
+  // que cada sección y fragmento caiga dentro del texto, que cada fragmento coincida
+  // con su parte del texto y con su huella, y que los identificadores no se repitan.
+  // Devuelve una lista de problemas en castellano; vacía si el paquete es válido.
   function validar(p) {
-    const e = [];
-    if (!p || typeof p !== "object") return ["No es un objeto"];
-    if (p.aidoc !== VERSION) e.push(`Versión no soportada: ${p.aidoc}`);
-    if (typeof p.texto !== "string") e.push("Falta el texto canónico");
-    for (const k of ["metadatos", "secciones", "fragmentos", "tablas", "enlaces", "imagenes"]) if (!(k in p)) e.push(`Falta "${k}"`);
-    if (e.length) return e;
-    for (const k of ["titulo", "idioma", "tipoOriginal", "creado", "hashOriginal"]) if (typeof p.metadatos[k] !== "string") e.push(`metadatos.${k} tiene que ser texto`);
-    const ids = new Set(p.secciones.map((s) => s.id));
-    for (const f of p.fragmentos) {
-      if (p.texto.slice(f.inicio, f.fin) !== f.texto) e.push(`${f.id}: no coincide con el texto canónico en [${f.inicio}, ${f.fin})`);
-      if (f.hash !== "sha256:" + sha256(f.texto)) e.push(`${f.id}: la huella no coincide`);
-      if (!ids.has(f.seccion)) e.push(`${f.id}: sección inexistente ${f.seccion}`);
+    let errores;
+    try {
+      errores = JS.validar(ESQUEMA, p, { formatos: true }).map((e) => `${e.ruta || "(raíz)"}: ${e.mensaje}`);
+    } catch (err) {
+      return [`No se pudo validar: ${err.message}`];
     }
-    return e;
+    if (errores.length) return errores;
+    const largo = p.texto.length;
+    const secciones = new Map();
+    for (const s of p.secciones) {
+      if (secciones.has(s.id)) errores.push(`Sección repetida: ${s.id}`);
+      secciones.set(s.id, s);
+      if (s.inicio > s.fin || s.fin > largo) errores.push(`${s.id}: el rango [${s.inicio}, ${s.fin}) no cae dentro del texto`);
+    }
+    const ids = new Set();
+    for (const f of p.fragmentos) {
+      if (ids.has(f.id)) errores.push(`Fragmento repetido: ${f.id}`);
+      ids.add(f.id);
+      if (p.texto.slice(f.inicio, f.fin) !== f.texto) errores.push(`${f.id}: no coincide con el texto canónico en [${f.inicio}, ${f.fin})`);
+      if (f.hash !== "sha256:" + sha256(f.texto)) errores.push(`${f.id}: la huella no coincide`);
+      const s = secciones.get(f.seccion);
+      if (!s) errores.push(`${f.id}: sección inexistente ${f.seccion}`);
+      else if (f.inicio < s.inicio || f.fin > s.fin) errores.push(`${f.id}: queda fuera de su sección ${s.id}`);
+    }
+    return errores;
   }
 
-  return { VERSION, sha256, tokens, idioma, detectarTipo, fragmentar, convertir, validar };
+  // Reemplaza la estimación por un conteo real, guardando qué tokenizador se usó.
+  function conConteo(p, { modelo, tokensOriginal, tokensTexto }) {
+    const medicion = {
+      metodo: `count_tokens de la API de Anthropic (${modelo})`,
+      modelo,
+      tokensOriginal,
+      tokensTexto,
+      ahorro: tokensOriginal ? 1 - tokensTexto / tokensOriginal : 0,
+    };
+    return { ...p, medicion };
+  }
+
+  // Guarda la descripción de una imagen y qué modelo la generó.
+  function conDescripcion(p, indice, { descripcion, textoDetectado = null, modelo }) {
+    const imagenes = p.imagenes.map((img, i) => (i === indice ? { ...img, descripcion, textoDetectado, descripcionModelo: modelo } : img));
+    return { ...p, imagenes };
+  }
+
+  return { VERSION, METODO_ESTIMADO, ESQUEMA, sha256, tokens, idioma, detectarTipo, fragmentar, convertir, validar, conConteo, conDescripcion };
 })();
 
 if (typeof module !== "undefined") module.exports = Aidoc;
