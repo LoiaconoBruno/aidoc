@@ -132,10 +132,18 @@ def convertir(md):
             while i < len(lineas) and re.match(patron, lineas[i]):
                 texto = re.sub(patron, "", lineas[i])
                 i += 1
-                while i < len(lineas) and lineas[i].startswith("   ") and lineas[i].strip():
-                    texto += " " + lineas[i].strip()
+                sub = []   # sublista: líneas con sangría que empiezan con "- " o "1. "
+                while i < len(lineas) and lineas[i].startswith("  ") and lineas[i].strip():
+                    hijo = re.match(r"^\s+(?:-|\d+\.) (.*)$", lineas[i])
+                    if hijo:
+                        sub.append(hijo.group(1))
+                    elif sub:
+                        sub[-1] += " " + lineas[i].strip()
+                    else:
+                        texto += " " + lineas[i].strip()
                     i += 1
-                items.append(f"<li>{en_linea(texto)}</li>")
+                anidada = f"<ul>{''.join(f'<li>{en_linea(x)}</li>' for x in sub)}</ul>" if sub else ""
+                items.append(f"<li>{en_linea(texto)}{anidada}</li>")
             if numerada:
                 inicio = int(numerada.group(1))
                 attr = f' start="{inicio}"' if inicio != 1 else ""
