@@ -15,9 +15,9 @@ aidoc es una página estática sin dependencias. Se abre desde la [demo en vivo]
 La página tiene cuatro zonas:
 
 1. **Entrada:** una zona para soltar un archivo `.html`, `.md` o `.txt` (o un `.aidoc.json` para validarlo), con los botones "Elegir archivo", "Pegar contenido" y "Cargar ejemplo". En "Opciones de conversión" están el tipo de entrada (se detecta solo) y el tamaño máximo de cada fragmento (200 a 3000 caracteres, 1200 por defecto).
-2. **Medición:** los tokens del original y del texto canónico, en números grandes, y el ahorro. Debajo, el método de conteo (estimación o conteo real con Claude), un resumen de lo que tiene el paquete, el botón "Descargar .aidoc.json" y una marca que dice si el paquete cumple la especificación.
+2. **Medición:** los tokens del original ("Antes: lo que leía la IA") y del texto canónico ("Después: el texto limpio"), en números grandes, y el ahorro ("Menos para leer"). Debajo, el método de conteo (estimación o conteo real con Claude), una ayuda plegable "¿Qué es un token?", un resumen de lo que tiene el paquete, el botón "Descargar el paquete (.aidoc.json)" y una marca que dice si el paquete cumple la especificación.
 3. **Vista dividida:** el original a la izquierda y el paquete a la derecha, en cinco pestañas: Texto, Estructura, Fragmentos, Imágenes y JSON. En el celular, un selector muestra uno u otro.
-4. **Conectar con Claude:** opcional. La key de la API de Anthropic y el modelo.
+4. **Opcional: conectar con Claude:** un panel cerrado que se abre con un clic. La key de la API de Anthropic y el modelo.
 
 La lógica está en archivos sin acceso al DOM:
 
@@ -59,7 +59,7 @@ Los campos `descripcionModelo` y `medicion.modelo` se sumaron a la especificaci�
 ### 4. Ejemplo resuelto
 
 1. **Cargar ejemplo.** Es una página HTML sobre el efecto Janssen con todo el ruido típico de la web: menú de navegación, un banner, scripts de analítica, estilos y pie de página. Tiene 1972 caracteres.
-2. **Medición.** **493 tokens** en el original y **183** en el texto canónico: **63 %** de ahorro, con la estimación de 1 token cada 4 caracteres. Tipo detectado: `text/html`; idioma: `es`. Al lado de "Descargar .aidoc.json" aparece "✓ Cumple aidoc 0.1".
+2. **Medición.** **493 tokens** en el original y **183** en el texto canónico: **63 %** de ahorro, con la estimación de 1 token cada 4 caracteres. Tipo detectado: `text/html`; idioma: `es`. Al lado de "Descargar el paquete (.aidoc.json)" aparece "✓ Cumple aidoc 0.1".
 3. **Texto canónico.** En la vista dividida, a la izquierda queda el HTML y a la derecha el texto, que empieza así:
 
 ```
@@ -84,7 +84,7 @@ El menú, el banner, los scripts y el pie desaparecieron. El énfasis (negrita, 
 Hay además una tabla con encabezados Material · Densidad (kg/m³) · μ y dos filas (Arroz, 800, 0,4; Trigo, 780, 0,35), una imagen con texto alternativo "Corte de un silo con las fuerzas sobre las paredes" y un enlace a la Wikipedia.
 
 5. **Fragmentos.** Tres, uno por sección (ninguna supera los 1200 caracteres). El primero va de la posición 0 a la 203, con la ruta `["El efecto Janssen en silos"]` y una huella `sha256:d93da4…`. Tocar un fragmento lo marca en el texto.
-6. **Descargar y validar.** "Descargar .aidoc.json" guarda el paquete. Soltar ese archivo en la zona de entrada lo valida. Si alguien cambia "1895" por "1985" en un fragmento, la validación dice `f1: no coincide con el texto canónico en [0, 203)` y `f1: la huella no coincide`. Si alguien escribe la fecha como "10/11/2026", dice `/metadatos/creado: no es una fecha y hora RFC 3339 válida`.
+6. **Descargar y validar.** "Descargar el paquete (.aidoc.json)" guarda el paquete. Soltar ese archivo en la zona de entrada lo valida. Si alguien cambia "1895" por "1985" en un fragmento, la validación dice `f1: no coincide con el texto canónico en [0, 203)` y `f1: la huella no coincide`. Si alguien escribe la fecha como "10/11/2026", dice `/metadatos/creado: no es una fecha y hora RFC 3339 válida`.
 
 ### 5. Validación y conexión con Claude
 

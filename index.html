@@ -8,15 +8,15 @@
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f6f8">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e1015">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233a4bd6'/%3E%3Cpath d='M12 9c-3 0-3 2-3 4s-1 3-2 3c1 0 2 1 2 3s0 4 3 4M20 9c3 0 3 2 3 4s1 3 2 3c-1 0-2 1-2 3s0 4-3 4' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="css/sistema.css">
-  <link rel="stylesheet" href="styles.css">
-  <script src="src/markdown.js" defer></script>
-  <script src="src/esquema.js" defer></script>
-  <script src="src/esquema-aidoc.js" defer></script>
-  <script src="src/aidoc.js" defer></script>
-  <script src="src/claude.js" defer></script>
-  <script src="src/ejemplo.js" defer></script>
-  <script src="src/app.js" defer></script>
+  <link rel="stylesheet" href="css/sistema.css?v=0.3.0">
+  <link rel="stylesheet" href="styles.css?v=0.3.0">
+  <script src="src/markdown.js?v=0.3.0" defer></script>
+  <script src="src/esquema.js?v=0.3.0" defer></script>
+  <script src="src/esquema-aidoc.js?v=0.3.0" defer></script>
+  <script src="src/aidoc.js?v=0.3.0" defer></script>
+  <script src="src/claude.js?v=0.3.0" defer></script>
+  <script src="src/ejemplo.js?v=0.3.0" defer></script>
+  <script src="src/app.js?v=0.3.0" defer></script>
 </head>
 <body>
   <a class="saltar" href="#contenido">Saltar al contenido</a>
@@ -37,9 +37,19 @@
 
   <main id="contenido" tabindex="-1">
     <div class="contenedor">
-      <section class="intro" aria-labelledby="titulo">
-        <h1 id="titulo">Digerir una vez, usar muchas veces</h1>
-        <p>Convertí una página web o un Markdown en un paquete <code>.aidoc.json</code> pre-digerido para IAs: texto limpio, estructura, fragmentos con huella y cuántos tokens se ahorran.</p>
+      <section class="portada" aria-labelledby="titulo">
+        <span class="portada__etiqueta">Para quien trabaja con IAs</span>
+        <h1 id="titulo">Que tu IA lea menos y entienda mejor</h1>
+        <p class="portada__bajada">Una página web trae menús, publicidad y código que una IA igual tiene que leer (y cobrar). aidoc se queda con el contenido, lo ordena y te dice cuánto texto te ahorraste. Todo pasa en tu navegador: nada se sube.</p>
+        <div class="portada__acciones">
+          <button type="button" class="btn btn--blanco btn--grande" id="portada-ejemplo">Probar con un ejemplo</button>
+          <button type="button" class="btn btn--claro btn--grande" id="portada-subir">Subir mi archivo</button>
+        </div>
+        <ol class="como-funciona" aria-label="Cómo funciona">
+          <li><strong>Subí o pegá un documento</strong><span>Una página web guardada (.html), un Markdown (.md) o un texto (.txt).</span></li>
+          <li><strong>aidoc lo limpia y lo ordena</strong><span>Saca lo que no es contenido y arma secciones, fragmentos y una huella para saber si cambió.</span></li>
+          <li><strong>Descargá el paquete</strong><span>Un archivo .aidoc.json listo para tu IA o tu buscador, con la cuenta de cuánto se ahorró.</span></li>
+        </ol>
       </section>
 
       <section class="panel entrada" aria-labelledby="t-entrada">
@@ -98,18 +108,18 @@
           <p class="medicion__archivo" id="archivo-nombre"></p>
           <div class="medicion__cifras">
             <div class="cifra">
-              <span class="cifra__k">Original</span>
+              <span class="cifra__k">Antes: lo que leía la IA</span>
               <span class="cifra__v" id="tok-original">—</span>
               <span class="cifra__u">tokens</span>
             </div>
             <svg class="cifra__flecha" aria-hidden="true" width="28" height="28" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <div class="cifra">
-              <span class="cifra__k">Texto canónico</span>
+              <span class="cifra__k">Después: el texto limpio</span>
               <span class="cifra__v" id="tok-texto">—</span>
               <span class="cifra__u">tokens</span>
             </div>
             <div class="cifra cifra--ahorro">
-              <span class="cifra__k">Ahorro</span>
+              <span class="cifra__k">Menos para leer</span>
               <span class="cifra__v" id="ahorro">—</span>
             </div>
           </div>
@@ -118,9 +128,13 @@
             <button type="button" class="btn btn--fantasma" id="contar">Contar con Claude</button>
           </div>
           <p class="campo__ayuda" id="contar-estado" aria-live="polite"></p>
+          <details class="explica">
+            <summary>¿Qué es un token?</summary>
+            <p>Es la unidad en la que una IA cuenta el texto: más o menos una palabra corta o un pedazo de una larga. Las IAs cobran por token y tienen un límite de cuántos pueden leer por vez, así que menos tokens es más barato, más rápido y deja lugar para otras cosas. Sin conectar Claude, aidoc estima 1 token cada 4 caracteres.</p>
+          </details>
           <ul class="medicion__resumen" id="resumen"></ul>
           <div class="acciones">
-            <button type="button" class="btn btn--primario" id="descargar">Descargar .aidoc.json</button>
+            <button type="button" class="btn btn--primario" id="descargar">Descargar el paquete (.aidoc.json)</button>
             <span class="chip" id="validez"></span>
           </div>
         </div>
@@ -169,8 +183,8 @@
         </div>
       </section>
 
-      <section class="panel claude" id="claude" aria-labelledby="t-claude">
-        <h2 id="t-claude">Conectar con Claude <span class="chip">opcional</span></h2>
+      <details class="panel claude" id="claude">
+        <summary class="claude__resumen"><h2 id="t-claude">Opcional: conectar con Claude <span class="chip">avanzado</span></h2><span class="claude__sub">Para contar los tokens exactos y describir las imágenes con tu propia key.</span></summary>
         <p>Con tu propia key de la API de Anthropic podés contar los tokens reales del modelo (el conteo es gratis) y describir las imágenes (se cobra a tu cuenta). Sin key, aidoc usa la estimación de 1 token cada 4 caracteres.</p>
         <div class="claude__grilla">
           <div class="campo">
@@ -186,7 +200,7 @@
         </div>
         <label class="opcion"><input type="checkbox" id="recordar"> Recordar la key en este navegador</label>
         <p class="campo__ayuda">Si no la recordás, se borra al cerrar la pestaña. <button type="button" class="enlace-boton" id="olvidar">Olvidar la key ahora</button></p>
-      </section>
+      </details>
     </div>
   </main>
 

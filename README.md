@@ -55,8 +55,8 @@ Abrí la [demo en vivo](https://loiaconobruno.github.io/aidoc/) o `index.html` c
 1. **Soltá un archivo** `.html`, `.md` o `.txt` en la zona de arriba, elegilo o pegá el contenido. Para probar, apretá **Cargar ejemplo**: una página HTML sobre el efecto Janssen con todo el ruido típico de la web (menú, banner, scripts de analítica, estilos y pie).
 2. **Mirá la medición:** el ejemplo tiene **493 tokens** en el original y **183** en el texto canónico, **63 %** de ahorro, con la estimación de 1 token cada 4 caracteres. Al lado aparece "✓ Cumple aidoc 0.1": el paquete pasó la validación completa.
 3. **Compará** el original y el resultado lado a lado (en el celular, con el selector Original / Resultado). En **Estructura**, tocá una sección para verla marcada en el texto; en **Fragmentos**, lo mismo con cada fragmento.
-4. **Descargar .aidoc.json** guarda el paquete. Si soltás un `.aidoc.json` en la zona de arriba, la página lo valida y lista cada problema con su ruta, por ejemplo `/fragmentos/0/hash: no cumple el patrón`.
-5. **Opcional, con tu key de la API de Anthropic** (en "Conectar con Claude"): **Contar con Claude** reemplaza la estimación por el conteo real del modelo elegido, que es gratuito, y en **Imágenes**, **Describir con Claude** completa la descripción y el texto de cada imagen, con costo para tu cuenta. El paquete guarda qué modelo hizo cada cosa.
+4. **Descargar el paquete (.aidoc.json)** lo guarda. Si soltás un `.aidoc.json` en la zona de arriba, la página lo valida y lista cada problema con su ruta, por ejemplo `/fragmentos/0/hash: no cumple el patrón`.
+5. **Opcional, con tu key de la API de Anthropic** (en el panel "Opcional: conectar con Claude", que se abre con un clic): **Contar con Claude** reemplaza la estimación por el conteo real del modelo elegido, que es gratuito, y en **Imágenes**, **Describir con Claude** completa la descripción y el texto de cada imagen, con costo para tu cuenta. El paquete guarda qué modelo hizo cada cosa.
 
 ## Comparativa con Docling y MarkItDown
 

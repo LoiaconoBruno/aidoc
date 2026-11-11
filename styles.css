@@ -499,3 +499,42 @@ mark.resaltado {
   margin-bottom: var(--e-1);
   overflow-wrap: anywhere;
 }
+
+/* Panel opcional de Claude: cerrado hasta que lo abras. */
+.claude > summary {
+  display: grid;
+  gap: var(--e-1);
+  cursor: pointer;
+  list-style: none;
+}
+
+.claude > summary::-webkit-details-marker {
+  display: none;
+}
+
+.claude > summary h2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e-2);
+  margin: 0;
+}
+
+.claude > summary h2::after {
+  content: "▾";
+  color: var(--acento);
+  font-size: var(--t-4);
+}
+
+.claude[open] > summary h2::after {
+  content: "▴";
+}
+
+.claude__sub {
+  color: var(--texto-suave);
+  font-size: var(--t-2);
+}
+
+.claude[open] > summary {
+  margin-bottom: var(--e-4);
+}

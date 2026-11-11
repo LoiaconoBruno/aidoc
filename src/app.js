@@ -44,6 +44,7 @@
   function pedirKey(mensaje) {
     $("key-ayuda").textContent = mensaje;
     $("key-ayuda").classList.add("campo__ayuda--aviso");
+    $("claude").open = true;
     $("claude").scrollIntoView({ behavior: "smooth", block: "start" });
     $("key").focus({ preventScroll: true });
   }
@@ -113,6 +114,8 @@
     convertir();
   }
   $("ejemplo").addEventListener("click", () => { cargarEjemplo(); $("resultado").scrollIntoView({ behavior: "smooth", block: "start" }); });
+  $("portada-ejemplo").addEventListener("click", () => $("ejemplo").click());
+  $("portada-subir").addEventListener("click", () => $("archivo").click());
 
   $("max").addEventListener("input", () => { $("v-max").textContent = $("max").value; });
   $("max").addEventListener("change", () => { if (estado.contenido) convertir(); });
